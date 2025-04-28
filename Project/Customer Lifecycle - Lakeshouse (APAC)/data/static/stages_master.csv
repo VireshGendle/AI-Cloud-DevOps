@@ -1,1 +1,7 @@
-
+StageID	StageName	StageDefinition
+S1	Lead	Initial signup or contact
+S2	Onboarding	Completed onboarding process
+S3	Active	Actively engaging with the product
+S4	At Risk	Low engagement for over 30 days
+S5	Churned	No engagement or subscription canceled (60+ days)
+S6	Re-engaged	Churned user reactivated via campaigns
