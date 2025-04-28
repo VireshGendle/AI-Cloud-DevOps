@@ -1,0 +1,51 @@
+Project Title: Customer Lifecycle Analytics Lakehouse (Asia-Pacific Digital Product Business)
+
+Business Goals (SMART Goals with Tangibles):
+
+Goal Area	Specific Goal Example	Timeline	KPI/Metric
+Customer Acquisition	Increase new customer signups by 15% QoQ	Quarterly	New Customers, Conversion Rate
+Engagement	Maintain WAU/MAU ratio ≥ 40% across all product features	Monthly	WAU, MAU, DAU, Feature Usage
+Retention	Improve cohort retention by 10% YoY for users within first 90 days	Yearly	Retention Rate, Cohort Retention Curves
+Revenue	Grow MRR by 12% annually, ARPU to increase 8% YoY	Annual	MRR, ARPU, CLV
+Agent Success	Ensure SLA compliance ≥ 95%, average CSAT ≥ 4.5/5	Monthly, Quarterly	SLA Compliance Rate, CSAT Score
+Goal Tracking	Achieve 80% of planned revenue & engagement targets per period	Monthly, Quarterly	Goal Actual vs. Target metrics
+Churn Reduction	Reduce churn rate from 15% to 10% within 2 quarters	Quarterly	Churn Rate, Revenue Loss from Churn
+Forecasting	Implement churn prediction with 85%+ accuracy	Yearly	Churn Prediction Accuracy
+
+Gold Layer Objects (Star Schema):
+
+Table Name	Type	Key Columns / Description
+FactTransactions	Fact	TransactionID, CustomerID, ProductID, Amount, TransactionDate, Currency, PaymentMethod
+FactEngagement	Fact	ActivityID, CustomerID, ActivityType, FeatureUsed, SessionDuration, EngagementScore
+FactRevenue	Fact (agg)	Monthly Revenue, MRR, ARPU, CLV, Churned Revenue
+FactGoalTracking	Fact (agg)	Timeframe (Month/Quarter/Year), Metric (MRR, Retention), Target, Actual, Variance
+DimCustomer	Dimension (SCD-2)	CustomerID, Name, Email, Region, Gender, SubscriptionPlan, Effective Dates
+DimAgent	Dimension	AgentID, AgentName, Region, RoleType, SLAComplianceRate, CSAT
+DimProduct	Dimension	ProductID, ProductName, Category, Price, LaunchDate
+DimStage	Dimension	StageID, StageName, StageDefinition
+DimSubscriptionPlan	Dimension (SCD-3)	PlanID, PlanName, MonthlyCost, Current Features, Previous Features
+
+Tangible DAX Measures (Deliverables in Power BI)
+
+Measure Name	DAX Formula	Purpose
+Total Customers	COUNTROWS(DimCustomer)	Total active customers
+New Customers (Period)	CALCULATE([Total Customers], FILTER(DimCustomer, DimCustomer[JoinDate] >= STARTDATE))	Count new customers in timeframe
+Churn Rate %	(DIVIDE([Churned Customers], [Total Customers])) * 100	% of customers churned
+MRR (Monthly Recurring Revenue)	SUM(FactRevenue[Monthly Revenue])	Total monthly recurring revenue
+ARPU (Average Revenue per User)	DIVIDE([MRR], [Total Customers])	ARPU metric
+CLV (Customer Lifetime Value)	AVERAGEX(SUMMARIZE(DimCustomer, DimCustomer[CustomerID], "CLV", SUM(FactTransactions[Amount])), [CLV])	Estimate of CLV
+Engagement Score Avg	AVERAGE(FactEngagement[EngagementScore])	Average engagement across customers
+Retention Rate % (Cohort)	(1 - [Churn Rate %]) * 100	Retention metric
+Goal Variance %	DIVIDE([Actual] - [Target], [Target]) * 100	Variance between target and actual for goal tracking
+SLA Compliance Rate %	AVERAGE(DimAgent[SLAComplianceRate])	Agent performance metric
+
+
+Power BI Deliverables (Screenshots + Visual Plan)
+
+Tab Name	Key Visuals	Measures (DAX)
+1. Acquisition	Line chart (New Customers over time), Map (by region), Pie (Channel)	New Customers, Total Customers
+2. Engagement	Bar (Activity types), Line (Avg Session Duration), Heatmap (Feature Usage)	Engagement Score Avg
+3. Retention	Line (Active users), Cohort chart (Retention by join date), Bar (Region)	Retention Rate %, Total Customers
+4. Churn	Line (Churn Rate), Bar (Churn by plan/region), Map (Churned Revenue)	Churn Rate %, Churned Revenue
+5. Revenue & CLV	KPI cards (MRR, ARPU, CLV), Bar (Revenue by Segment), Scatter (CLV vs. Lifespan)	MRR, ARPU, CLV
+6. Goal Tracking	Table (Goals vs Actuals), Line (Variance %), Slicer (Timeframes)	Goal Variance %, SLA Compliance Rate %
