@@ -1,0 +1,37 @@
+{
+  "name": "CustomerLifecycleDLT",
+  "storage": "/mnt/datalake/dlt_output",
+  "target": "customer_lifecycle_db",
+  "clusters": [
+    {
+      "label": "default",
+      "num_workers": 2
+    }
+  ],
+  "libraries": [],
+  "continuous": false,
+  "development": true,
+  "photon": true,
+  "channel": "CURRENT",
+  "edition": "ADVANCED",
+  "notebooks": [
+    {
+      "path": "/Repos/CustomerLifecycle_Lakehouse/notebooks/bronze/01_bronze_ingestion"
+    },
+    {
+      "path": "/Repos/CustomerLifecycle_Lakehouse/notebooks/silver/01_lifecycle_stages"
+    },
+    {
+      "path": "/Repos/CustomerLifecycle_Lakehouse/notebooks/silver/02_engagement_scores"
+    },
+    {
+      "path": "/Repos/CustomerLifecycle_Lakehouse/notebooks/silver/03_customer_stage_assignment"
+    },
+    {
+      "path": "/Repos/CustomerLifecycle_Lakehouse/notebooks/gold/01_dim_customer"
+    },
+    {
+      "path": "/Repos/CustomerLifecycle_Lakehouse/notebooks/gold/06_fact_transactions"
+    }
+  ]
+}
