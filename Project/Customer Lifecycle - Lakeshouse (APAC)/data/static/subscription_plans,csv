@@ -1,0 +1,4 @@
+PlanID	PlanName	MonthlyCost	CurrentFeatures	PreviousFeatures
+PL001	Basic	50	Analytics, Reports	None
+PL002	Pro	120	Analytics, Reports, AI	Analytics, Reports
+PL003	Enterprise	250	Full Suite	Pro + Add-ons
