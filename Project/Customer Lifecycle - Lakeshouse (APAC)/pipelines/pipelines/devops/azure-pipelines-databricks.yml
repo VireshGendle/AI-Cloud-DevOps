@@ -1,0 +1,24 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  DATABRICKS_HOST: $(databricks_host)
+  DATABRICKS_TOKEN: $(databricks_token)
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+
+- script: |
+    pip install databricks-cli
+    databricks configure --token <<< "$(DATABRICKS_HOST)\n$(DATABRICKS_TOKEN)"
+    databricks workspace import_dir CustomerLifecycle_Lakehouse /Repos/CustomerLifecycle_Lakehouse -o
+  displayName: 'Upload Notebooks to Databricks Workspace'
+
+- script: |
+    databricks pipelines start --pipeline-id $(dlt_pipeline_id)
+  displayName: 'Trigger DLT Pipeline'
