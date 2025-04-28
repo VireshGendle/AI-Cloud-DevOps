@@ -1,0 +1,25 @@
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $clientId = "$(powerbi_client_id)"
+      $clientSecret = "$(powerbi_client_secret)"
+      $tenantId = "$(powerbi_tenant_id)"
+      $workspaceId = "$(powerbi_workspace_id)"
+      $datasetId = "$(powerbi_dataset_id)"
+      $tokenResponse = Invoke-RestMethod -Method POST -Uri "https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token" -Body @{
+          grant_type    = "client_credentials"
+          client_id     = $clientId
+          client_secret = $clientSecret
+          scope         = "https://analysis.windows.net/powerbi/api/.default"
+      }
+      $token = $tokenResponse.access_token
+      Invoke-RestMethod -Method POST -Uri "https://api.powerbi.com/v1.0/myorg/groups/$workspaceId/datasets/$datasetId/refreshes" -Headers @{Authorization = "Bearer $token"}
+  displayName: 'Trigger Power BI Dataset Refresh'
