@@ -1,0 +1,118 @@
+Customer Lifecycle Lakehouse – Enterprise Approach Document
+1️⃣ Project Overview
+This project establishes a Lakehouse architecture to track and optimize the Customer Lifecycle for a digital product business across Asia-Pacific markets.
+The solution is designed to:
+
+Ingest, process, and analyze data from transactional systems, engagement platforms, and CRM tools.
+
+Monitor customer journey stages, agent performance, revenue metrics, and cohort retention.
+
+Enable business users through Power BI dashboards integrated with CI/CD pipelines for automated data refreshes.
+
+2️⃣ Architecture Summary
+
+Layer	Components
+Data Sources	Transactional DBs, Engagement Logs, CRM exports, Static CSVs
+Ingestion (Bronze)	Databricks Auto Loader / Delta Live Tables (DLT), Partitioned Delta tables
+Processing (Silver)	Business logic transformations: lifecycle stages, engagement scores
+Modeling (Gold)	Star schema (Facts & Dimensions), SCD-2/3 handling, Data versioning
+Serving	Power BI, DAX calculations, KPIs, visualization layers
+DevOps	Azure DevOps Pipelines, DLT Configs, Power BI dataset refresh automation
+3️⃣ Business Goals & Metrics
+
+Objective	Metrics / KPIs	DAX Measures (examples)
+Track Customer Lifecycle	Churn Rate, Retention Rate, New Customers	Churn Rate (%), Retention Rate (%)
+Monitor Revenue Growth	Total Revenue, Monthly Revenue Trend, MRR	Total Revenue, MRR, Revenue Forecast
+Evaluate Engagement	Avg Engagement Score, High Engagement Customers	Avg Engagement Score, High Engagement Customers
+Measure Goal Achievement	Goal Achievement Rate (MRR, Retention)	Goal Achievement Rate (MRR)
+Analyze Cohorts	Retention by Cohort (D+7, D+30), Churn by Segment	Cohort Retention Matrix
+Forecasting	Revenue, Churn projections	Revenue Forecast (Next Quarter)
+4️⃣ Data Modeling (Gold Layer Objects)
+
+Table Name	Type	Notes
+DimCustomer	Dimension	SCD-2, tracks region and plan changes
+DimSubscriptionPlan	Dimension	SCD-3, tracks plan features
+DimProduct	Dimension	Product catalog, categories, pricing
+DimAgent	Dimension	Sales/support agents, SLA metrics
+DimTime	Dimension	Full calendar attributes
+FactTransactions	Fact	Transactions (customer, product, agent)
+FactEngagement	Fact	Engagement scores (customer, date)
+FactGoalTracking	Fact	Targets vs. actuals (MRR, Retention)
+5️⃣ Data Flow (Medallion Architecture)
+🔹 Bronze Layer:
+Ingested Data:
+
+customers_raw, transactions_raw, engagement_raw
+
+Partitioned by date for scalability.
+
+Stored in Delta format.
+
+🔹 Silver Layer:
+Transformations:
+
+Derive Lifecycle Stages (Active, At Risk, Churned).
+
+Calculate Engagement Scores.
+
+Merge into Customer Profile table.
+
+🔹 Gold Layer:
+Star Schema:
+
+Fact tables linked to dimensions (customer, product, agent, time).
+
+Versioned Dimensions (SCD-2 & SCD-3).
+
+Supports Power BI reporting layer.
+
+6️⃣ Power BI Reporting Design
+
+Tab Name	Focus
+Customer Lifecycle	Executive KPIs, overall lifecycle distribution
+Acquisition	New customer trends, acquisition funnels
+Activation	Activation rates, feature adoption, cohort analysis
+Engagement	Engagement score trends, feature usage, session data
+Monetization	Revenue breakdown, MRR trends, product performance
+Retention	Retention cohorts, churn rates, predictive analysis
+🧩 Visual Standards:
+1920×1080 canvas, blue-teal theme.
+
+Filters on left: Date, Region, Subscription Plan.
+
+6 KPI cards, 6 charts, 1 table per tab.
+
+Tooltips for added realism.
+
+Tab consistency: Same layout, spacing, and visible tab bar across all images.
+
+7️⃣ DevOps & Deployment
+
+Area	Toolset
+CI/CD for Data Pipelines	Azure DevOps, Databricks CLI, DLT JSON config
+Power BI Refresh Automation	Azure DevOps YAML, Power BI REST API
+8️⃣ Monitoring & Governance
+DLT lineage views for data flow tracing.
+
+Audit logs on ingestion and transformation steps.
+
+Optional alerting mechanisms on data freshness and anomalies.
+
+9️⃣ Data Versioning
+Delta Lake time travel enabled.
+
+SCD-2/3 applied to dimensions:
+
+DimCustomer tracks region/plan changes.
+
+DimSubscriptionPlan tracks plan cost/feature changes.
+
+10️⃣ Documentation & Deliverables
+
+Deliverable	Status
+Folder Structure	✅ Completed
+Data Generation Notebooks	✅ Completed
+Bronze → Silver → Gold Scripts	✅ Completed
+DAX Measures Documentation	✅ Completed
+Power BI PBIX & Screenshots	✅ Completed
+DevOps Pipelines (DLT + Power BI)	✅ Completed
