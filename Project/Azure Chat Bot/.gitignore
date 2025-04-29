@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+*.env
+
+# Docker
+*.log
+Dockerfile
+
+# VSCode settings
+.vscode/
+
+# OS Files
+.DS_Store
+
+# Azure artifacts
+local.settings.json
