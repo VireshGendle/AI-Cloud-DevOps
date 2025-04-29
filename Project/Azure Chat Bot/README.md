@@ -27,3 +27,7 @@ deployment/
 
 requirements.txt
 azure-pipelines.yml
+
+## 🔐 Encryption Key Setup (Optional)
+
+If your chatbot handles sensitive information (like secrets, tokens, or personal data), you can enable encryption using the Python cryptography module.
