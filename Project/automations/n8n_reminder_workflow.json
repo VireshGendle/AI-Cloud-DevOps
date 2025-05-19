@@ -1,0 +1,15 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "functionCode": "const matchToday = new Date().toISOString().split('T')[0];
+return items.filter(item => item.json.Date === matchToday);"
+      },
+      "name": "Filter Today's Matches",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [300, 300]
+    }
+  ],
+  "connections": {}
+}
